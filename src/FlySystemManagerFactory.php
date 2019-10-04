@@ -50,7 +50,13 @@ class FlySystemManagerFactory
 
         // Zend uses config key
         if ($container->has('config')) {
-            return $container->get('config');
+            $config = $container->get('config');
+            
+            if ($config instanceof \ArrayObject) {
+                return $config->getArrayCopy();
+            }
+            
+            return $config;
         }
 
         // Slim Config comes from "settings"
