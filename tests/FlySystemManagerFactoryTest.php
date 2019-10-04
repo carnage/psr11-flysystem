@@ -136,6 +136,24 @@ class FlySystemManagerFactoryTest extends TestCase
         $this->assertInstanceOf(MainConfig::class, $mainConfig);
     }
 
+    public function testGetConfigAsArrayObjectFromConfig()
+    {
+        $this->container = $this->createMock(ContainerInterface::class);
+        $map = [
+            ['config', true],
+            ['settings', false],
+        ];
+        $this->container->expects($this->any())
+            ->method('has')
+            ->will($this->returnValueMap($map));
+        $this->container->expects($this->any())
+            ->method('get')
+            ->with('config')
+            ->willReturn(new \ArrayObject($this->getConfig()));
+        $mainConfig = $this->factory->getConfig($this->container);
+        $this->assertInstanceOf(MainConfig::class, $mainConfig);
+    }
+    
     /**
      * @expectedException \WShafer\PSR11FlySystem\Exception\MissingConfigException
      */
